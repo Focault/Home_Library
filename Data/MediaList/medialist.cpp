@@ -77,7 +77,7 @@ void MediaList::PushHead(TYPE a_value) {
 }
 
 void MediaList::PushTail(TYPE a_value) {
-    Node *node = new Node(a_value, &this->m_head, this->m_head.Next());
+    Node *node = new Node(a_value, this->m_tail.Prev(), &this->m_tail);
     this->m_tail.Prev()->SetNext(node);
     this->m_tail.SetPrev(node);
 }

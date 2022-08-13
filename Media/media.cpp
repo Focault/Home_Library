@@ -47,7 +47,6 @@ Media::Media(FILE* a_fileStream, Media_t a_medioum)
         RemoveNewLine(fgets(nameBufferOne, MAX_NAME_LEN, a_fileStream));
         // fseek(a_fileStream, -1, SEEK_CUR);
         RemoveNewLine(fgets(isOriginal, sizeof("0\0\n"), a_fileStream));
-        printf("%s", isOriginal);
         RemoveNewLine(fgets(cdType, sizeof("0\0\n"), a_fileStream));
         RemoveNewLine(fgets(nameBufferTwo, MAX_NAME_LEN, a_fileStream));
         this->m_cd = new Disk{nameBufferOne, (bool)atoi(isOriginal), (Disk_t)atoi(cdType), nameBufferTwo};
