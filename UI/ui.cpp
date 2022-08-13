@@ -61,8 +61,9 @@ bool AskYorN(const char* a_prompt) {
     bool result;
     while (true)
     {    
-        printf("%s - (y\\n) - ", a_prompt);
-        scanf("%c", &answer);
+        printf("%s - (y\\n): ", a_prompt);
+        getchar();
+        answer = (char)getchar();
         if (answer == 'y' || answer == 'Y') {
             result = true;
             break;
@@ -81,7 +82,7 @@ bool Ask(const char* a_prompt, const char* a_false, const char* a_true) {
     bool result;
     while (true)
     {    
-        printf("%s\n\nFor %s Press (1)\nFor %s Press (2)\n", a_prompt, a_false, a_true);
+        printf("%s\n\nFor %s Press (1)\nFor %s Press (2)\n\n", a_prompt, a_false, a_true);
         scanf("%d", &answer);
         if (answer == 1) {
             result = false;

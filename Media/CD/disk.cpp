@@ -25,7 +25,6 @@ Disk::Disk(const Name a_cd_name, bool a_isOriginal, Disk_t a_cdType, Name a_arti
 {
 }
 
-
 const Name& Disk::Get() const noexcept {
     return this->m_cd_name;
 }

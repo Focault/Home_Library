@@ -243,10 +243,10 @@ void Library::Load() {
         while (LoadMediaUnit(pFile, &loaded, &loadedMedioum)) {
             switch (loadedMedioum) {
             case BOOK:
-                this->m_books.PushHead(loaded);
+                this->m_books.PushTail(loaded);
                 break;
             case CD:
-                this->m_cds.PushHead(loaded);
+                this->m_cds.PushTail(loaded);
                 break;
             }
         }
