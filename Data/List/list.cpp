@@ -87,6 +87,11 @@ const typename Node<T>::Data& Node<T>::Get() const noexcept {
 }
 
 template<typename T>
+typename Node<T>::Data& Node<T>::Get() noexcept {
+    return this->m_data;
+}
+
+template<typename T>
 Node<T>* Node<T>::Prev() const noexcept {
     return this->m_prev;
 }
@@ -198,6 +203,11 @@ size_t List<T>::Size() const noexcept {
 }
 
 template<typename T>
+bool List<T>::isEmpty() const noexcept {
+    return (this->m_head.Next() == this->m_tail.Next());     
+}
+
+template<typename T>
 void List<T>::Copy(const List *a_other) {
     details::list::Node<T> *read = a_other->m_head.Next();
     while (read != a_other->m_tail.Next()) {
@@ -229,6 +239,41 @@ const typename List<T>::Data& List<T>::Get(size_t a_indexOfValue) const noexcept
 		++counter;				
 	}	
     return this->m_head.Get();     
+}
+
+template<typename T>
+typename List<T>::Data& List<T>::Get(size_t a_indexOfValue) noexcept {
+	size_t counter = 0;
+	details::list::Node<T>* read = this->m_head.Next();
+
+	while(read != this->m_tail.Next()) {			
+        if (counter == a_indexOfValue) {
+            return read->Get();
+        }
+		read = read->Next();
+		++counter;				
+	}	
+    return this->m_head.Get();     
+}
+
+template<typename T>
+typename List<T>::Data& List<T>::GetHead() {
+    return this->m_head.Next()->Get();     
+}
+
+template<typename T>
+const typename List<T>::Data& List<T>::GetHead() const {
+    return this->m_head.Next()->Get();     
+}
+
+template<typename T>
+typename List<T>::Data& List<T>::GetTail() {
+    return this->m_tail.Prev()->Get();     
+}
+
+template<typename T>
+const typename List<T>::Data& List<T>::GetTail() const {
+    return this->m_tail.Prev()->Get();     
 }
 
 template<typename T>
