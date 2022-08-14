@@ -21,6 +21,7 @@ class Node {
         Node& operator=(const Node& a_other) = default;
 
         const Data& Get() const noexcept;
+        Data& Get() noexcept;
 
         Node *Prev() const noexcept;
         Node *Next() const noexcept;
@@ -53,20 +54,28 @@ public:
 
     explicit List() noexcept;
     explicit List(bool a_deleteAtEnd) noexcept; // default is false
-    ~List() noexcept;
     List(const List& a_other);
     List& operator=(const List& a_other);
+    ~List() noexcept;
 
     void PushHead(Data a_value);
     void PushTail(Data a_value);
 
     size_t Size() const noexcept;
+    bool isEmpty() const noexcept;
 
     void Copy(const List *a_other);
     void Clear() noexcept;
 
     /* returns default value if out of bound */
+    Data& Get(size_t a_indexOfValue) noexcept;
     const Data& Get(size_t a_indexOfValue) const noexcept;
+
+    /* returns default value if empty */
+    Data& GetHead();
+    const Data& GetHead() const;
+    Data& GetTail();
+    const Data& GetTail() const;
 
     /* returns index of termination */
     size_t ForEach(act a_action, void* a_context);
