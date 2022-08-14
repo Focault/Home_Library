@@ -1,13 +1,12 @@
 #ifndef HOMELIBRARY_LIBRARY_H
 #define HOMELIBRARY_LIBRARY_H
 
-
 #include "media.hpp"
 #include "ui.hpp"
 #include "medialist.hpp"
 
 namespace experis {
-    
+
 class Library {
 public:
     explicit Library();
