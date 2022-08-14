@@ -1,14 +1,13 @@
 TARGET= HomeLibrary.out
 CC= g++
-CFLAGS= -g -I $(UI) -I $(MEDIA) -I $(CD) -I $(BOOK) -I $(LIBRARY) -I $(LIST) -I $(NAME) -I $(SIZETL) -I $(UTIL)
-OBJS= main.o library.o medialist.o media.o ui.o book.o name.o size_t_list.o disk.o libraryutilities.o
+CFLAGS= -g -I $(UI) -I $(MEDIA) -I $(CD) -I $(BOOK) -I $(LIBRARY) -I $(LIST) -I $(NAME) -I $(UTIL)
+OBJS= main.o library.o media.o ui.o book.o name.o list.o disk.o libraryutilities.o
 UI= UI/
 MEDIA= Media/
 CD= Media/CD/
 BOOK= Media/Book/
 LIBRARY= Library/
-LIST= Data/MediaList/
-SIZETL= Data/Size_t_List/
+LIST= Data/List/
 NAME= Data/Name/
 UTIL= Library/Utilities/
 
@@ -19,14 +18,11 @@ $(TARGET): $(OBJS)
 main.o: main.cpp $(LIBRARY)library.hpp
 	$(CC) $(CFLAGS) -c main.cpp
 
-library.o: $(LIBRARY)library.cpp $(LIBRARY)library.hpp $(LIST)medialist.hpp $(MEDIA)media.hpp $(UI)ui.hpp $(SIZETL)size_t_list.hpp $(UTIL)libraryutilities.hpp
+library.o: $(LIBRARY)library.cpp $(LIBRARY)library.hpp $(LIST)list.hpp $(MEDIA)media.hpp $(UI)ui.hpp $(UTIL)libraryutilities.hpp
 	$(CC) $(CFLAGS) -c $(LIBRARY)library.cpp
 
-medialist.o: $(LIST)medialist.cpp $(LIST)medialist.hpp $(MEDIA)media.hpp
-	$(CC) $(CFLAGS) -c $(LIST)medialist.cpp
-
-size_t_list.o: $(SIZETL)size_t_list.cpp $(SIZETL)size_t_list.hpp
-	$(CC) $(CFLAGS) -c $(SIZETL)size_t_list.cpp
+list.o: $(LIST)list.cpp $(LIST)list.hpp
+	$(CC) $(CFLAGS) -c $(LIST)list.cpp
 
 media.o: $(MEDIA)media.cpp $(MEDIA)media.hpp $(BOOK)book.hpp $(CD)disk.hpp
 	$(CC) $(CFLAGS) -c $(MEDIA)media.cpp
