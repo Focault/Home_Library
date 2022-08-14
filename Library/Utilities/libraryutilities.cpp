@@ -1,20 +1,19 @@
 #include "media.hpp"
+#include "list.hpp"
 #include "libraryutilities.hpp"
-#include "size_t_list.hpp"
-#include "medialist.hpp"
 #include "ui.hpp"
 
 namespace experis {
 
 /* ListAndIndex */
 
-ListAndIndex::ListAndIndex(const MediaList *a_mediaList) 
+ListAndIndex::ListAndIndex(const List<Media*> *a_mediaList) 
 : m_idx(0)
 , m_mediaList(a_mediaList)
 {
 }
 
-ListAndIndex::ListAndIndex(const MediaList *a_mediaList, size_t a_startFrom) 
+ListAndIndex::ListAndIndex(const List<Media*> *a_mediaList, size_t a_startFrom) 
 : m_idx(a_startFrom)
 , m_mediaList(a_mediaList)
 {
@@ -24,7 +23,7 @@ size_t ListAndIndex::Get() const noexcept {
     return this->m_idx;
 }
 
-const MediaList* ListAndIndex::GetList() const noexcept {
+const List<Media*>* ListAndIndex::GetList() const noexcept {
     return this->m_mediaList;
 }
 
@@ -50,12 +49,12 @@ SearchContext::SearchContext(bool a_searchForLoaned) noexcept
     AskInput("Please Insert Search Key: ", this->m_searchFor, MAX_NAME_LEN);
 }
 
-Size_t_List* SearchContext::GetBooksIndexes() noexcept {
-    return &this->m_booksIndexes;
+List<size_t>& SearchContext::GetBooksIndexes() noexcept {
+    return this->m_booksIndexes;
 }
 
-Size_t_List* SearchContext::GetCDsIndexes() noexcept {
-    return &this->m_cdsIndexes;
+List<size_t>& SearchContext::GetCDsIndexes() noexcept {
+    return this->m_cdsIndexes;
 }
 
 const char* SearchContext::GetSearchKey() const noexcept {

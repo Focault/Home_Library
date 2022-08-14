@@ -1,9 +1,8 @@
 #ifndef HOMELIBRARY_UTILITIES_H
 #define HOMELIBRARY_UTILITIES_H
 
+#include "list.hpp"
 #include "media.hpp"
-#include "medialist.hpp"
-#include "size_t_list.hpp"
 
 namespace experis {
 
@@ -11,18 +10,18 @@ namespace experis {
 
 struct ListAndIndex {
 public:
-    ListAndIndex(const MediaList *a_mediaList);
-    ListAndIndex(const MediaList *a_mediaList, size_t a_startFrom);
+    ListAndIndex(const List<Media*> *a_mediaList);
+    ListAndIndex(const List<Media*> *a_mediaList, size_t a_startFrom);
 
     size_t Get() const noexcept;
-    const MediaList* GetList() const noexcept;
+    const List<Media*>* GetList() const noexcept;
 
     void Advance() noexcept;
     void Print(size_t a_idx) const noexcept; 
 
 private:
     size_t m_idx;
-    const MediaList *m_mediaList;
+    const List<Media*> *m_mediaList;
 };
 
 /* SearchContext */
@@ -32,8 +31,8 @@ public:
     SearchContext(bool a_searchForLoaned) noexcept;
     ~SearchContext() = default;
 
-    Size_t_List* GetBooksIndexes() noexcept;
-    Size_t_List* GetCDsIndexes() noexcept;
+    List<size_t>& GetBooksIndexes() noexcept;
+    List<size_t>& GetCDsIndexes() noexcept;
     const char* GetSearchKey() const noexcept;
     size_t GetIdx(const Media_t a_medioum) const noexcept;
 
@@ -42,9 +41,9 @@ public:
     const bool m_searchForLoaned;
 
 private:
-    Size_t_List m_booksIndexes;
+    List<size_t> m_booksIndexes;
     size_t m_booksIdx;
-    Size_t_List m_cdsIndexes;
+    List<size_t> m_cdsIndexes;
     size_t m_cdsIdx;
     char m_searchFor[MAX_NAME_LEN];
 };

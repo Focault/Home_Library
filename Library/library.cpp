@@ -1,8 +1,7 @@
 #include "library.hpp"
 #include <stdio.h>
-#include "medialist.hpp"
+#include "list.hpp"
 #include "libraryutilities.hpp"
-#include "size_t_list.hpp"
 #include "media.hpp"
 #include "ui.hpp"
 
@@ -10,16 +9,16 @@ namespace experis {
 
 #define FILE_NAME "Data/Memory.DATA"
 
-static bool PrintAllAction(const Media* a_media, void* a_context);
-static bool PrintDetailsForMatches(const Media* a_media, void* a_searchFor);
-static bool SaveAllToFile(const Media* a_media, void* a_fileStream);
-static bool ReturnIndexesOfMatches(const Media* a_media, void* a_context);
+static bool PrintAllAction(Media* a_media, void* a_context);
+static bool PrintDetailsForMatches(Media* a_media, void* a_searchFor);
+static bool SaveAllToFile(Media* a_media, void* a_fileStream);
+static bool ReturnIndexesOfMatches(Media* a_media, void* a_context);
 static bool PrintNumberedOption(size_t a_idx, void* a_listAndIndex);
 
 
 Library::Library() 
-: m_books()
-, m_cds()
+: m_books(true)
+, m_cds(true)
 , m_interface()
 {
     this->Load();
@@ -88,7 +87,7 @@ Media* Library::Choose(bool a_searchForLoaned) {
 
     if (choiches.GetIdx(BOOK) != 0) {
         ListAndIndex booksListAndIndex{&this->m_books};
-        choiches.GetBooksIndexes()->ForEach(PrintNumberedOption, (void*)&booksListAndIndex);
+        choiches.GetBooksIndexes().ForEach(PrintNumberedOption, (void*)&booksListAndIndex);
         seperator = booksListAndIndex.Get();
     }
 
@@ -96,7 +95,7 @@ Media* Library::Choose(bool a_searchForLoaned) {
 
     if (choiches.GetIdx(CD) != 0) {
         ListAndIndex cdsListAndIndex{&this->m_cds, seperator};
-        choiches.GetCDsIndexes()->ForEach(PrintNumberedOption, (void*)&cdsListAndIndex);
+        choiches.GetCDsIndexes().ForEach(PrintNumberedOption, (void*)&cdsListAndIndex);
         limit = cdsListAndIndex.Get();
     }
 
@@ -107,9 +106,9 @@ Media* Library::Choose(bool a_searchForLoaned) {
     size_t choiceIdx = this->m_interface.AskIdx(limit);
     if (choiceIdx >= seperator) {
         choiceIdx -= seperator;
-        return this->m_cds.Get(choiches.GetCDsIndexes()->Get(choiceIdx));
+        return this->m_cds.Get(choiches.GetCDsIndexes().Get(choiceIdx));
     }
-    return this->m_books.Get(choiches.GetBooksIndexes()->Get(choiceIdx));
+    return this->m_books.Get(choiches.GetBooksIndexes().Get(choiceIdx));
 }
 
 void Library::Save() const {
@@ -142,32 +141,32 @@ void Library::Load() {
 
 /* Static Functions */
 
-static bool PrintAllAction(const Media* a_media, void* a_context) {
+static bool PrintAllAction(Media* a_media, void* a_context) {
     a_media->Print();
     return true;
 }
 
-static bool PrintDetailsForMatches(const Media* a_media, void* a_searchFor) {
+static bool PrintDetailsForMatches(Media* a_media, void* a_searchFor) {
     if (a_media->IsNameBeginWith((char*)a_searchFor)) {
         a_media->Details();
     }
     return true;
 }
 
-static bool SaveAllToFile(const Media* a_media, void* a_fileStream) {
+static bool SaveAllToFile(Media* a_media, void* a_fileStream) {
     a_media->Save((FILE*)a_fileStream);
     return true;
 }
 
-static bool ReturnIndexesOfMatches(const Media* a_media, void* a_context) {
+static bool ReturnIndexesOfMatches(Media* a_media, void* a_context) {
     if (a_media->IsNameBeginWith(((SearchContext*)a_context)->GetSearchKey()) && 
         a_media->IsLoaned() == ((SearchContext*)a_context)->m_searchForLoaned) {
         switch (a_media->Medioum()) {
         case BOOK:
-            ((SearchContext*)a_context)->GetBooksIndexes()->PushHead(((SearchContext*)a_context)->GetIdx(BOOK));
+            ((SearchContext*)a_context)->GetBooksIndexes().PushHead(((SearchContext*)a_context)->GetIdx(BOOK));
             break;
         case CD:
-            ((SearchContext*)a_context)->GetCDsIndexes()->PushHead(((SearchContext*)a_context)->GetIdx(CD));
+            ((SearchContext*)a_context)->GetCDsIndexes().PushHead(((SearchContext*)a_context)->GetIdx(CD));
             break;
         }
     }

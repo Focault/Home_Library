@@ -3,7 +3,7 @@
 
 #include "media.hpp"
 #include "ui.hpp"
-#include "medialist.hpp"
+#include "list.hpp"
 
 namespace experis {
 
@@ -25,8 +25,8 @@ private:
     void Save() const;
     void Load();
 
-    MediaList m_books;
-    MediaList m_cds;
+    List<Media*> m_books;
+    List<Media*> m_cds;
     const UI m_interface;
 };
 

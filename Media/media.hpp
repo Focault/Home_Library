@@ -1,8 +1,8 @@
 #ifndef HOMELIBRARY_MEDIA_H
 #define HOMELIBRARY_MEDIA_H
 
-#include "book.hpp"
 #include <stdio.h> /* FILE */
+#include "book.hpp"
 #include "name.hpp"
 #include "disk.hpp"
 
