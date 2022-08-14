@@ -6,8 +6,8 @@
 
 class Book {
 public:
-    Book() noexcept;
-    Book(const char *a_bookName, const char *a_authorName) noexcept; 
+    explicit Book() noexcept;
+    explicit Book(const char *a_bookName, const char *a_authorName) noexcept; 
     ~Book() = default;
 
     Book& operator=(const Book& a_book) = default;

@@ -14,8 +14,8 @@ enum Media_t {
 
 class Media {
 public:
-    Media(Media_t a_medioum);
-    Media(FILE* a_fileStream, Media_t a_medioum);
+    explicit Media(Media_t a_medioum);
+    explicit Media(FILE* a_fileStream, Media_t a_medioum);
     ~Media() noexcept;
     
     Media& operator=(const Media& a_media);

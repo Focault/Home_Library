@@ -11,7 +11,7 @@ typedef bool (*Act)(D_TYPE a_data, void* a_context);
 
 class Size_t_Node {
 public:
-    Size_t_Node(D_TYPE a_data, Size_t_Node *a_prev, Size_t_Node *a_next) noexcept;
+    explicit Size_t_Node(D_TYPE a_data, Size_t_Node *a_prev, Size_t_Node *a_next) noexcept;
     ~Size_t_Node() noexcept;
 
     D_TYPE Get() const noexcept;
@@ -32,7 +32,7 @@ private:
 
 class Size_t_List {
 public:
-    Size_t_List() noexcept;
+    explicit Size_t_List() noexcept;
     ~Size_t_List() noexcept;
     Size_t_List(const Size_t_List& a_other);
     Size_t_List& operator=(const Size_t_List& a_other);

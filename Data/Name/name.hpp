@@ -5,9 +5,9 @@
 
 class Name {
 public:
-    Name();
-    Name(const char *a_name);
-    Name(const char *a_prompt, bool a_stdin);
+    explicit Name();
+    explicit Name(const char *a_name);
+    explicit Name(const char *a_prompt, bool a_stdin);
     Name(const Name &a_other);
     Name &operator=(const Name &a_other);
     ~Name();

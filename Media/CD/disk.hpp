@@ -11,8 +11,8 @@ enum Disk_t {
 
 class Disk {
 public:
-    Disk() noexcept;
-    Disk(const Name a_cd_name, bool a_isOriginal, Disk_t a_cdType, Name a_artist) noexcept;
+    explicit Disk() noexcept;
+    explicit Disk(const char *a_cd_name, bool a_isOriginal, Disk_t a_cdType, const char *a_artist) noexcept;
 
     ~Disk() = default;
 
