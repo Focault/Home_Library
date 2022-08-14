@@ -3,6 +3,8 @@
 
 #include <stddef.h>
 
+namespace experis {
+
 #define D_TYPE size_t
 #define DEFAULT_VAL 0
 
@@ -58,5 +60,7 @@ private:
     Size_t_Node m_head;
     Size_t_Node m_tail;
 };
+
+} // experis
 
 #endif /* HOMELIBRARY_SIZE_T_LIST_H */

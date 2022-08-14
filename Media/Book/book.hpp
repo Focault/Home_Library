@@ -4,6 +4,8 @@
 #include "name.hpp"
 #include <stdio.h> /* FILE */
 
+namespace experis {
+
 class Book {
 public:
     explicit Book() noexcept;
@@ -24,5 +26,7 @@ private:
     const Name m_book_name;
     const Name m_author;
 };
+
+} // experis
 
 #endif /* HOMELIBRARY_BOOK_H */

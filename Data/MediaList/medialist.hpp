@@ -4,6 +4,8 @@
 #include <stddef.h>
 #include "media.hpp"
 
+namespace experis {
+
 #define TYPE Media*
 #define DEFAULT_VALUE nullptr
 #define DELETE true
@@ -63,5 +65,7 @@ private:
     Node m_head;
     Node m_tail;
 };
+
+} // experis
 
 #endif /* HOMELIBRARY_MEDIALIST_H */

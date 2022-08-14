@@ -6,6 +6,7 @@
 #include "name.hpp"
 #include "disk.hpp"
 
+namespace experis {
 
 enum Media_t {
     CD,
@@ -53,5 +54,7 @@ private:
  * @return false - reached EOF
  */
 bool LoadMediaUnit(FILE* a_fileStream, Media **a_newMedia, Media_t *a_medioum);
+
+} // experis
 
 #endif /* HOMELIBRARY_MEDIA_H */

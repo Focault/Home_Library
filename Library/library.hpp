@@ -1,9 +1,13 @@
 #ifndef HOMELIBRARY_LIBRARY_H
 #define HOMELIBRARY_LIBRARY_H
 
-#include "medialist.hpp"
-#include "ui.hpp"
 
+#include "media.hpp"
+#include "ui.hpp"
+#include "medialist.hpp"
+
+namespace experis {
+    
 class Library {
 public:
     explicit Library();
@@ -26,5 +30,7 @@ private:
     MediaList m_cds;
     const UI m_interface;
 };
+
+} // experis
 
 #endif /* HOMELIBRARY_LIBRARY_H */

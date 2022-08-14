@@ -3,6 +3,8 @@
 
 #include <stddef.h>
 
+namespace experis {
+
 enum Option {
     EXIT,
     LIST,
@@ -33,5 +35,7 @@ void AskInput(const char* a_prompt, char *a_buffer, size_t a_length);
 void PrintMedia(bool a_isLoaned, const char *a_mediaDetails);
 
 void PrintMediaDetails(bool a_isLoaned, const char *a_mediaDetails, const char *a_loaner);
+
+} // experis
 
 #endif /* HOMELIBRARY_UI_H */

@@ -1,6 +1,8 @@
 #include "size_t_list.hpp"
 #include <stddef.h>
 
+namespace experis {
+
 /* Size_t_Node */
 
 Size_t_Node::Size_t_Node(D_TYPE a_data, Size_t_Node *a_prev, Size_t_Node *a_next) noexcept
@@ -140,3 +142,5 @@ size_t Size_t_List::ForEach(Act a_action, void* a_context) const {
     }
     return i;
 }
+
+} // experis

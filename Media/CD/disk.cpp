@@ -4,6 +4,8 @@
 #include "name.hpp"
 #include "ui.hpp"
 
+namespace experis {
+
 Disk::Disk() noexcept 
 : m_cd_name("Please Enter CD Name: ", true)
 , m_isOriginal(AskYorN("Is The CD Original?"))
@@ -53,3 +55,5 @@ void Disk::Save(FILE* a_fileStream) const {
                                               (int)this->m_cdType, 
                                               this->m_artist.GetName());
 }
+
+} // experis

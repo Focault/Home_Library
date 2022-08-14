@@ -4,6 +4,8 @@
 #include <stdio.h> /* FILE */
 #include "name.hpp"
 
+namespace experis {
+
 enum Disk_t {
     MUSIC,
     MOVIE
@@ -32,5 +34,7 @@ private:
     Disk_t m_cdType;
     Name m_artist;
 };
+
+} // experis
 
 #endif /* HOMELIBRARY_DISK_H */
