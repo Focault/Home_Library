@@ -17,7 +17,7 @@ Disk::Disk() noexcept
     }
 }
 
-Disk::Disk(const Name a_cd_name, bool a_isOriginal, Disk_t a_cdType, Name a_artist) noexcept 
+Disk::Disk(const char *a_cd_name, bool a_isOriginal, Disk_t a_cdType, const char *a_artist) noexcept 
 : m_cd_name(a_cd_name)
 , m_isOriginal(a_isOriginal)
 , m_cdType(a_cdType)

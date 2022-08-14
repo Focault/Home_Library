@@ -16,7 +16,7 @@ enum Option {
 
 class UI {
 public:
-    UI() = default;
+    explicit UI() = default;
     ~UI() = default;
 
     Option Menu() const;

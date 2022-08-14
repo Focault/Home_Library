@@ -6,7 +6,7 @@
 
 class Library {
 public:
-    Library();
+    explicit Library();
     ~Library() = default;
 
     void RunLibrary();

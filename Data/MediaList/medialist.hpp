@@ -15,7 +15,7 @@ typedef bool (*safeAct)(const TYPE a_data, void* a_context);
 
 class Node {
 public:
-    Node(TYPE a_data, Node *a_prev, Node *a_next) noexcept;
+    explicit Node(TYPE a_data, Node *a_prev, Node *a_next) noexcept;
     ~Node() noexcept;
 
     TYPE Get() const noexcept;
@@ -36,7 +36,7 @@ private:
 
 class MediaList {
 public:
-    MediaList() noexcept;
+    explicit MediaList() noexcept;
     ~MediaList() noexcept;
     MediaList(const MediaList& a_other);
     MediaList& operator=(const MediaList& a_other);
