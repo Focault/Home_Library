@@ -1,7 +1,6 @@
 #include "disk.hpp"
 #include <stdio.h> /* printf, FILE, fprintf */
 #include <string.h> /* strlen */
-#include <strings.h> /* strncasecmp */
 #include "name.hpp"
 #include "ui.hpp"
 
@@ -12,7 +11,7 @@ Disk::Disk() noexcept
 , m_artist(" ", false)
 {
     if (this->m_cdType == MUSIC) {
-        Name artist{"Please Enter CD's Singer\\Band: ", true};
+        Name artist{"Please Enter CD's Singer\\Band\\Creator: ", true};
         m_artist = artist;
     }
 }
@@ -25,33 +24,27 @@ Disk::Disk(const char *a_cd_name, bool a_isOriginal, Disk_t a_cdType, const char
 {
 }
 
-const Name& Disk::Get() const noexcept {
+const Name& Disk::GetName() const noexcept {
     return this->m_cd_name;
 }
 
-void Disk::Print(bool a_isLoaned) const noexcept {
-    a_isLoaned ? printf("* ") : printf("  ");
-    printf("CD Title: %s | Is Original? ", this->m_cd_name.GetName());
-    fputs(this->m_isOriginal ? "true" : "false", stdout);
-    printf(" | Type: ");
-    if (this->m_cdType == MUSIC) {
-        printf("Music | Artist: %s\n", this->m_artist.GetName());
-    } else {
-        fputs("Movie\n", stdout);
+const Name& Disk::GetArtist() const noexcept {
+    return this->m_artist;
+}
+
+void Disk::FormatDetails(char *a_buffer, size_t a_length) const {
+    const char *isOriginalStr = this->m_isOriginal ? "true" : "false";
+    size_t offset = snprintf(a_buffer, a_length, "CD Title: %s | Is Original? %s | Type: ",
+                                                 this->m_cd_name.GetName(), 
+                                                 isOriginalStr);
+    if (a_length > offset) {
+        if (this->m_cdType == MUSIC) {
+            snprintf(a_buffer + offset, a_length - offset, "Music | Artist: %s", this->m_artist.GetName());
+        } 
+        else {
+            snprintf(a_buffer + offset, a_length - offset, "Movie");
+        }
     }
-}
-
-void Disk::Details(bool a_isLoaned, const Name& a_loanedTo) const noexcept {
-    this->Print(a_isLoaned);
-    printf("  Loaned? - ");
-    fputs(a_isLoaned ? "true" : "false", stdout);
-    a_isLoaned ? printf("\tLoaned To %s\n\n", a_loanedTo.GetName()) : putchar('\n');
-}
-
-bool Disk::IsNameBeginWith(const char *a_name_shred) const noexcept {
-    size_t keyLen = strlen(a_name_shred);
-    return (0 == strncasecmp(this->m_cd_name.GetName(), a_name_shred, keyLen) || 
-            0 == strncasecmp(this->m_artist.GetName(), a_name_shred, keyLen));
 }
 
 void Disk::Save(FILE* a_fileStream) const {

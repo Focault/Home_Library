@@ -12,12 +12,11 @@ public:
 
     Book& operator=(const Book& a_book) = default;
 
-    const Name& Get() const noexcept;
+    const Name& GetName() const noexcept;
+    const Name& GetAuthor() const noexcept;
 
-    void Print(bool a_isLoaned) const noexcept;
-    void Details(bool a_isLoaned, const Name& a_loanedTo) const noexcept;
-
-    bool IsNameBeginWith(const char *a_name_shred) const noexcept;
+    // Minimum Size of Buffer should be 200 bytes
+    void FormatDetails(char *a_buffer, size_t a_length) const;
 
     void Save(FILE* a_fileStream) const;
 

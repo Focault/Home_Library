@@ -12,6 +12,7 @@ enum Media_t {
     BOOK
 };
 
+// Manage Loanable Media
 class Media {
 public:
     explicit Media(Media_t a_medioum);

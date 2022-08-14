@@ -1,135 +1,19 @@
 #include "library.hpp"
 #include <stdio.h>
 #include "medialist.hpp"
+#include "libraryutilities.hpp"
 #include "size_t_list.hpp"
 #include "media.hpp"
 #include "ui.hpp"
 
 #define FILE_NAME "Data/Memory.DATA"
 
-struct ListAndIndex {
-public:
-    ListAndIndex(const MediaList *a_mediaList);
-    ListAndIndex(const MediaList *a_mediaList, size_t a_startFrom);
-
-    size_t Get() const noexcept;
-    const MediaList* GetList() const noexcept;
-
-    void Advance() noexcept;
-    void Print(size_t a_idx) const noexcept; 
-
-private:
-    size_t m_idx;
-    const MediaList *m_mediaList;
-};
-
-ListAndIndex::ListAndIndex(const MediaList *a_mediaList) 
-: m_idx(0)
-, m_mediaList(a_mediaList)
-{
-}
-
-ListAndIndex::ListAndIndex(const MediaList *a_mediaList, size_t a_startFrom) 
-: m_idx(a_startFrom)
-, m_mediaList(a_mediaList)
-{
-}
-
-size_t ListAndIndex::Get() const noexcept {
-    return this->m_idx;
-}
-
-const MediaList* ListAndIndex::GetList() const noexcept {
-    return this->m_mediaList;
-}
-
-void ListAndIndex::Advance() noexcept {
-    this->m_idx += 1;
-}
-
-void ListAndIndex::Print(size_t a_idx) const noexcept {
-    printf("(%lu)", this->m_idx);
-    this->m_mediaList->Get(a_idx)->Print();
-}
-
-struct Context {
-public:
-    Context(const char *a_searchFor, bool a_searchForLoaned) noexcept;
-    ~Context() noexcept;
-
-    Size_t_List* GetBooksIndexes() noexcept;
-    Size_t_List* GetCDsIndexes() noexcept;
-    const char* GetSearchKey() const noexcept;
-    const bool GetSearchForLoanedStatus() const noexcept;
-    size_t GetIdx(const Media_t a_medioum) const noexcept;
-
-    void Advance(const Media_t a_medioum) noexcept;
-
-private:
-    Size_t_List m_booksIndexes;
-    size_t m_booksIdx;
-    Size_t_List m_cdsIndexes;
-    size_t m_cdsIdx;
-    const char *m_searchFor;
-    const bool m_searchForLoaned;
-};
-
-Context::Context(const char *a_searchFor, bool a_searchForLoaned) noexcept
-: m_booksIndexes()
-, m_booksIdx(0)
-, m_cdsIndexes()
-, m_cdsIdx(0)
-, m_searchFor(a_searchFor)
-, m_searchForLoaned(a_searchForLoaned)
-{
-}
-
-Context::~Context() noexcept {
-    delete[] this->m_searchFor;
-}
-
-Size_t_List* Context::GetBooksIndexes() noexcept {
-    return &this->m_booksIndexes;
-}
-
-Size_t_List* Context::GetCDsIndexes() noexcept {
-    return &this->m_cdsIndexes;
-}
-
-const char* Context::GetSearchKey() const noexcept {
-    return this->m_searchFor;
-}
-
-const bool Context::GetSearchForLoanedStatus() const noexcept {
-    return this->m_searchForLoaned;
-}
-
-size_t Context::GetIdx(const Media_t a_medioum) const noexcept {
-    switch (a_medioum) {
-    case BOOK:
-        return this->m_booksIdx;
-    case CD:
-        return this->m_cdsIdx;
-    }
-    return 0;
-}
-
-void Context::Advance(const Media_t a_medioum) noexcept {
-    switch (a_medioum) {
-    case BOOK:
-        this->m_booksIdx += 1;
-        break;
-    case CD:
-        this->m_cdsIdx += 1;
-        break;
-    }
-}
-
 static bool PrintAllAction(const Media* a_media, void* a_context);
 static bool PrintDetailsForMatches(const Media* a_media, void* a_searchFor);
 static bool SaveAllToFile(const Media* a_media, void* a_fileStream);
 static bool ReturnIndexesOfMatches(const Media* a_media, void* a_context);
 static bool PrintNumberedOption(size_t a_idx, void* a_listAndIndex);
+
 
 Library::Library() 
 : m_books()
@@ -172,10 +56,10 @@ void Library::ListAllMedia() const noexcept {
 }
 
 void Library::PrintDetails() const noexcept {
-    const char *searchKey = this->m_interface.SearchFor();
+    char searchKey[MAX_NAME_LEN];
+    AskInput("Please Insert Search Key: ", searchKey, MAX_NAME_LEN);
     this->m_books.ForEach(PrintDetailsForMatches, (void*)searchKey);
     this->m_cds.ForEach(PrintDetailsForMatches, (void*)searchKey);
-    delete[] searchKey;
 }
 
 void Library::MarkLoaned() {
@@ -196,7 +80,7 @@ Media* Library::Choose(bool a_searchForLoaned) {
     size_t limit = 0;
     size_t seperator = 0;
 
-    Context choiches{this->m_interface.SearchFor(), a_searchForLoaned};
+    SearchContext choiches{a_searchForLoaned};
     this->m_books.ForEach(ReturnIndexesOfMatches, (void*)&choiches);
     this->m_cds.ForEach(ReturnIndexesOfMatches, (void*)&choiches);
 
@@ -254,6 +138,8 @@ void Library::Load() {
     }
 }
 
+/* Static Functions */
+
 static bool PrintAllAction(const Media* a_media, void* a_context) {
     a_media->Print();
     return true;
@@ -272,18 +158,18 @@ static bool SaveAllToFile(const Media* a_media, void* a_fileStream) {
 }
 
 static bool ReturnIndexesOfMatches(const Media* a_media, void* a_context) {
-    if (a_media->IsNameBeginWith(((Context*)a_context)->GetSearchKey()) && 
-        a_media->IsLoaned() == ((Context*)a_context)->GetSearchForLoanedStatus()) {
+    if (a_media->IsNameBeginWith(((SearchContext*)a_context)->GetSearchKey()) && 
+        a_media->IsLoaned() == ((SearchContext*)a_context)->m_searchForLoaned) {
         switch (a_media->Medioum()) {
         case BOOK:
-            ((Context*)a_context)->GetBooksIndexes()->PushHead(((Context*)a_context)->GetIdx(BOOK));
+            ((SearchContext*)a_context)->GetBooksIndexes()->PushHead(((SearchContext*)a_context)->GetIdx(BOOK));
             break;
         case CD:
-            ((Context*)a_context)->GetCDsIndexes()->PushHead(((Context*)a_context)->GetIdx(CD));
+            ((SearchContext*)a_context)->GetCDsIndexes()->PushHead(((SearchContext*)a_context)->GetIdx(CD));
             break;
         }
     }
-    ((Context*)a_context)->Advance(a_media->Medioum());
+    ((SearchContext*)a_context)->Advance(a_media->Medioum());
     return true;
 }
 

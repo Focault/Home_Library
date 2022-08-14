@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h> /* printf */
 #include <time.h>
+#include "ui.hpp"
 
 static char* GenerateName();
 static char* CreateConcatenated(const char* a_firstName, const char* a_secondName);
@@ -22,12 +23,10 @@ Name::Name(const Name &a_other)
 {
 }
 
-// ! refactor
 Name::Name(const char *a_prompt, bool a_stdin) {
     if (a_stdin) {
         char *newName = new char[MAX_NAME_LEN];
-        printf("%s", a_prompt);
-        scanf(" %30[^\n]s", newName);
+        AskInput(a_prompt, newName, MAX_NAME_LEN);
         this->m_name = Duplicate(newName);
         delete[] newName;
     } else {

@@ -1,15 +1,20 @@
 #include "media.hpp"
-#include <string.h>
+#include <string.h> /* strlen */
+#include <strings.h> /* strncasecmp */
 #include <stdlib.h> /* atoi */
 #include "book.hpp"
 #include "name.hpp"
 #include "disk.hpp"
+#include "ui.hpp"
 
+#define BOOL_FILE_SIZE sizeof("0\0\n")
+#define BUFFER_SIZE 200
 
-#define BOOL_FILE_SIZE 3
 
 static char* RemoveNewLine(char *a_endWthNewLine);
 
+
+/* Media */
 
 Media::Media(Media_t a_medioum) 
 : m_book(nullptr)
@@ -30,7 +35,7 @@ Media::Media(Media_t a_medioum)
 
 Media::Media(FILE* a_fileStream, Media_t a_medioum)
 : m_book(nullptr)
-// , m_cd(nullptr)
+, m_cd(nullptr)
 , m_medioum(a_medioum)
 , m_isLoaned(false)
 , m_loanedTo(" ", false)
@@ -45,8 +50,7 @@ Media::Media(FILE* a_fileStream, Media_t a_medioum)
         break;
     case CD:
         RemoveNewLine(fgets(nameBufferOne, MAX_NAME_LEN, a_fileStream));
-        // fseek(a_fileStream, -1, SEEK_CUR);
-        RemoveNewLine(fgets(isOriginal, sizeof("0\0\n"), a_fileStream));
+        RemoveNewLine(fgets(isOriginal, BOOL_FILE_SIZE, a_fileStream));
         RemoveNewLine(fgets(cdType, sizeof("0\0\n"), a_fileStream));
         RemoveNewLine(fgets(nameBufferTwo, MAX_NAME_LEN, a_fileStream));
         this->m_cd = new Disk{nameBufferOne, (bool)atoi(isOriginal), (Disk_t)atoi(cdType), nameBufferTwo};
@@ -81,23 +85,29 @@ const Media_t Media::Medioum() const noexcept {
 }
 
 void Media::Print() const noexcept {
+    char buffer[BUFFER_SIZE];
     switch (this->m_medioum) {
     case BOOK:
-        this->m_book->Print(this->m_isLoaned);
+        this->m_book->FormatDetails(buffer, BUFFER_SIZE);
+        PrintMedia(this->m_isLoaned, buffer);
         break;
     case CD:
-        this->m_cd->Print(this->m_isLoaned);
+        this->m_cd->FormatDetails(buffer, BUFFER_SIZE);
+        PrintMedia(this->m_isLoaned, buffer);
         break;
     }
 }
 
 void Media::Details() const noexcept {
+    char buffer[BUFFER_SIZE];
     switch (this->m_medioum) {
     case BOOK:
-        this->m_book->Details(this->m_isLoaned, this->m_loanedTo);
+        this->m_book->FormatDetails(buffer, BUFFER_SIZE);
+        PrintMediaDetails(this->m_isLoaned, buffer, this->m_loanedTo.GetName());
         break;
     case CD:
-        this->m_cd->Details(this->m_isLoaned, this->m_loanedTo);
+        this->m_cd->FormatDetails(buffer, BUFFER_SIZE);
+        PrintMediaDetails(this->m_isLoaned, buffer, this->m_loanedTo.GetName());
         break;
     }
 }
@@ -115,12 +125,15 @@ void Media::MarkReturned() {
 }
 
 bool Media::IsNameBeginWith(const char *a_name_shred) const noexcept {
+    size_t keyLen = strlen(a_name_shred);
     switch (this->m_medioum) {
     case BOOK:
-        return this->m_book->IsNameBeginWith(a_name_shred);
+        return (0 == strncasecmp(this->m_book->GetName().GetName(), a_name_shred, keyLen) || 
+                0 == strncasecmp(this->m_book->GetAuthor().GetName(), a_name_shred, keyLen));
         break;
     case CD:
-        return this->m_cd->IsNameBeginWith(a_name_shred);
+        return (0 == strncasecmp(this->m_cd->GetName().GetName(), a_name_shred, keyLen) || 
+                0 == strncasecmp(this->m_cd->GetArtist().GetName(), a_name_shred, keyLen));
         break;
     }
     return false;
@@ -144,6 +157,7 @@ void Media::Save(FILE* a_fileStream) const {
     fprintf(a_fileStream, "%d\n%s\n", (int)this->m_isLoaned, this->m_loanedTo.GetName());
 }
 
+/* Functions */
 
 bool LoadMediaUnit(FILE* a_fileStream, Media **a_newMedia, Media_t *a_medioum) {
     const int medioumSym = fgetc(a_fileStream);
@@ -161,9 +175,11 @@ bool LoadMediaUnit(FILE* a_fileStream, Media **a_newMedia, Media_t *a_medioum) {
     default:
         return false;
     }
-        *a_newMedia = new Media{a_fileStream, *a_medioum};
+    *a_newMedia = new Media{a_fileStream, *a_medioum};
     return true;
 }
+
+/* Static Functions */
 
 static char* RemoveNewLine(char *a_endWthNewLine) {
     a_endWthNewLine[strlen(a_endWthNewLine) - 1] = '\0';
