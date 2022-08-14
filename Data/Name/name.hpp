@@ -2,6 +2,7 @@
 #define HOMELIBRARY_NAME_H
 
 #define MAX_NAME_LEN 30
+#define MAX_NAME_LEN_DIGIT_LIMIT = 2
 
 class Name {
 public:

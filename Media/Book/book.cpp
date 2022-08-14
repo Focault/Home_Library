@@ -17,26 +17,16 @@ Book::Book(const char *a_bookName, const char *a_authorName) noexcept
 {
 }
 
-const Name& Book::Get() const noexcept {
+const Name& Book::GetName() const noexcept {
     return this->m_book_name;
 }
 
-void Book::Print(bool a_isLoaned) const noexcept {
-    a_isLoaned ? printf("* ") : printf("  ");
-    printf("Book Title: %s | Written By: %s\n", this->m_book_name.GetName(), this->m_author.GetName());
+const Name& Book::GetAuthor() const noexcept {
+    return this->m_author;
 }
 
-void Book::Details(bool a_isLoaned, const Name& a_loanedTo) const noexcept {
-    this->Print(a_isLoaned);
-    printf("  Loaned? - ");
-    fputs(a_isLoaned ? "true" : "false", stdout);
-    a_isLoaned ? printf("\tLoaned To %s\n\n", a_loanedTo.GetName()) : putchar('\n');
-}
-
-bool Book::IsNameBeginWith(const char *a_name_shred) const noexcept {
-    size_t keyLen = strlen(a_name_shred);
-    return (0 == strncasecmp(this->m_book_name.GetName(), a_name_shred, keyLen) || 
-            0 == strncasecmp(this->m_author.GetName(), a_name_shred, keyLen));
+void Book::FormatDetails(char *a_buffer, size_t a_length) const {
+    snprintf(a_buffer, a_length, "Book Title: %s | Written By: %s", this->m_book_name.GetName(), this->m_author.GetName());
 }
 
 void Book::Save(FILE* a_fileStream) const {
