@@ -4,6 +4,8 @@
 #include <strings.h> /* strncasecmp */
 #include "name.hpp"
 
+namespace experis {
+
 Book::Book() noexcept
 : m_book_name("Please Insert Book's Name: ", true)
 , m_author("Please Insert Author's Name: ", true)
@@ -32,3 +34,5 @@ void Book::FormatDetails(char *a_buffer, size_t a_length) const {
 void Book::Save(FILE* a_fileStream) const {
     fprintf(a_fileStream, "%s\n%s\n", this->m_book_name.GetName(), this->m_author.GetName());
 }
+
+} // experis

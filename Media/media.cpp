@@ -7,6 +7,8 @@
 #include "disk.hpp"
 #include "ui.hpp"
 
+namespace experis {
+
 #define BOOL_FILE_SIZE sizeof("0\0\n")
 #define BUFFER_SIZE 200
 
@@ -185,3 +187,5 @@ static char* RemoveNewLine(char *a_endWthNewLine) {
     a_endWthNewLine[strlen(a_endWthNewLine) - 1] = '\0';
     return a_endWthNewLine;
 }
+
+} // experis

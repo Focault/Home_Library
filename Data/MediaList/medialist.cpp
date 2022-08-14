@@ -1,6 +1,8 @@
 #include "medialist.hpp"
 #include <stddef.h>
 
+namespace experis {
+
 /* Node */
 
 Node::Node(TYPE a_data, Node *a_prev, Node *a_next) noexcept
@@ -155,3 +157,5 @@ size_t MediaList::ForEach(safeAct a_action, void* a_context) const {
     }
     return i;
 }
+
+} // experis

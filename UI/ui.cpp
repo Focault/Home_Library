@@ -3,6 +3,8 @@
 #include <stdlib.h> /* strtol */
 #include "name.hpp"
 
+namespace experis {
+
 #define INDEX_DIGITS_LIMIT 5
 #define SCANF_FORMAT_LEN 15
 #define MAX_OPTION_DIGIT_LIMIT 1
@@ -117,3 +119,5 @@ void PrintMediaDetails(bool a_isLoaned, const char *a_mediaDetails, const char *
     fputs(a_isLoaned ? "true" : "false", stdout);
     a_isLoaned ? printf("\tLoaned To %s\n\n", a_loaner) : printf("\n\n");
 }
+
+} // experis

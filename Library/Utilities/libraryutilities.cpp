@@ -1,6 +1,10 @@
+#include "media.hpp"
 #include "libraryutilities.hpp"
 #include "size_t_list.hpp"
+#include "medialist.hpp"
 #include "ui.hpp"
+
+namespace experis {
 
 /* ListAndIndex */
 
@@ -78,3 +82,5 @@ void SearchContext::Advance(const Media_t a_medioum) noexcept {
         break;
     }
 }
+
+} // experis

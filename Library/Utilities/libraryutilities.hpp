@@ -1,8 +1,11 @@
 #ifndef HOMELIBRARY_UTILITIES_H
 #define HOMELIBRARY_UTILITIES_H
 
+#include "media.hpp"
 #include "medialist.hpp"
 #include "size_t_list.hpp"
+
+namespace experis {
 
 /* ListAndIndex */
 
@@ -45,5 +48,7 @@ private:
     size_t m_cdsIdx;
     char m_searchFor[MAX_NAME_LEN];
 };
+
+} // experis
 
 #endif /* HOMELIBRARY_UTILITIES_H */

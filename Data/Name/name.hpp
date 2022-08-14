@@ -1,6 +1,8 @@
 #ifndef HOMELIBRARY_NAME_H
 #define HOMELIBRARY_NAME_H
 
+namespace experis {
+
 #define MAX_NAME_LEN 30
 #define MAX_NAME_LEN_DIGIT_LIMIT = 2
 
@@ -22,5 +24,7 @@ public:
 private:
     char *m_name;
 };
+
+} // experis
 
 #endif /* HOMELIBRARY_NAME_H */

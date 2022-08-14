@@ -6,6 +6,8 @@
 #include "media.hpp"
 #include "ui.hpp"
 
+namespace experis {
+
 #define FILE_NAME "Data/Memory.DATA"
 
 static bool PrintAllAction(const Media* a_media, void* a_context);
@@ -178,3 +180,5 @@ static bool PrintNumberedOption(size_t a_idx, void* a_listAndIndex) {
     ((ListAndIndex*)a_listAndIndex)->Print(a_idx);
     return true;
 }
+
+} // experis

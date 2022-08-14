@@ -4,6 +4,8 @@
 #include <time.h>
 #include "ui.hpp"
 
+namespace experis {
+
 static char* GenerateName();
 static char* CreateConcatenated(const char* a_firstName, const char* a_secondName);
 static char* Duplicate(const char *a_str);
@@ -94,3 +96,5 @@ static char *CreateConcatenated(const char* a_first, const char* a_second) {
 static char *Duplicate(const char *a_str) {
     return strcpy(new char[strlen(a_str)+sizeof('\0')] , a_str);
 }
+
+} // experis
