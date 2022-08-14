@@ -30,10 +30,55 @@ Node<T>::Node(Node<T> *a_prev, Node<T> *a_next, bool a_deleteAtEnd) noexcept
 }
 
 template<typename T>
-Node<T>::~Node() noexcept{
+Node<T>::~Node() noexcept {
     if (this->m_deleteAtEnd == true) {
-        // delete this->m_data;
+        delete this->m_data;
     }
+}
+
+template<>
+Node<size_t>::~Node() noexcept {
+    // do nothing
+}
+
+template<>
+Node<long>::~Node() noexcept {
+    // do nothing
+}
+
+template<>
+Node<char>::~Node() noexcept {
+    // do nothing
+}
+
+template<>
+Node<unsigned char>::~Node() noexcept {
+    // do nothing
+}
+
+template<>
+Node<int>::~Node() noexcept {
+    // do nothing
+}
+
+template<>
+Node<unsigned int>::~Node() noexcept {
+    // do nothing
+}
+
+template<>
+Node<bool>::~Node() noexcept {
+    // do nothing
+}
+
+template<>
+Node<short>::~Node() noexcept {
+    // do nothing
+}
+
+template<>
+Node<unsigned short>::~Node() noexcept {
+    // do nothing
 }
 
 template<typename T>
