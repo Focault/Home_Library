@@ -16,9 +16,9 @@ class Node {
 
         explicit Node(Data a_data, Node *a_prev, Node *a_next, bool a_deleteAtEnd) noexcept;
         explicit Node(Node *a_prev, Node *a_next, bool a_deleteAtEnd) noexcept;
-        ~Node() noexcept;
         Node(const Node& a_other) = default;
         Node& operator=(const Node& a_other) = default;
+        ~Node() noexcept;
 
         const Data& Get() const noexcept;
         Data& Get() noexcept;
@@ -38,7 +38,29 @@ class Node {
         Node *m_prev;
         Node *m_next;
         bool m_deleteAtEnd;
-    };
+};
+
+template<typename T>
+class ListIterator {
+public:
+    typedef T Data;
+
+    explicit ListIterator();
+    explicit ListIterator(Node<Data>* a_node);
+    ListIterator(const ListIterator& a_other) = default;
+    ListIterator& operator=(const ListIterator& a_other) = default;
+    ~ListIterator() = default;
+
+    bool IsNot(const ListIterator& a_other) const noexcept;
+
+    Data& GetValue() const noexcept;
+    Data& GetValue() noexcept;
+
+    void AdvanceToNext();
+
+private:
+    Node<Data>* m_node;
+};
 
 } // details
 } // list
@@ -46,6 +68,7 @@ class Node {
 template<typename T>
 class List {
 public:
+    class ListIterator;
     typedef T Data;
 
     /* returns false for stopping the iteration */
@@ -64,11 +87,10 @@ public:
     size_t Size() const noexcept;
     bool isEmpty() const noexcept;
 
-    void Copy(const List *a_other);
-    void Clear() noexcept;
-
+    details::list::ListIterator<T>& GetIteratorToFirst();
+    details::list::ListIterator<T>& GetIteratorToAfterLastValue();
+    
     /* returns default value if out of bound */
-    Data& Get(size_t a_indexOfValue) noexcept;
     const Data& Get(size_t a_indexOfValue) const noexcept;
 
     /* returns default value if empty */
@@ -81,12 +103,20 @@ public:
     size_t ForEach(act a_action, void* a_context);
     size_t ForEach(safeAct a_action, void* a_context) const;
 
+    /* returns default value if out of bound */
+    Data& Get(size_t a_indexOfValue) noexcept;
+
 private:
     class Node;
 
+    void Copy(const List *a_other);
+    void Clear() noexcept;
+    
     details::list::Node<Data> m_head;
     details::list::Node<Data> m_tail;
     bool m_deleteAtEnd;
+    
+    details::list::ListIterator<Data> m_itr;
 };
 
 } // experis
