@@ -81,6 +81,16 @@ Node<unsigned short>::~Node() noexcept {
     // do nothing
 }
 
+template<>
+Node<double>::~Node() noexcept {
+    // do nothing
+}
+
+template<>
+Node<float>::~Node() noexcept {
+    // do nothing
+}
+
 template<typename T>
 const typename Node<T>::Data& Node<T>::Get() const noexcept {
     return this->m_data;
@@ -131,6 +141,42 @@ void Node<T>::Set(Node<T> *a_prev, Node<T> *a_next, bool a_deleteAtEnd) noexcept
     this->m_deleteAtEnd = a_deleteAtEnd;
 }
 
+/* ListIterator */
+
+template<typename T>
+ListIterator<T>::ListIterator() 
+: m_node(nullptr)
+{
+}
+
+template<typename T>
+ListIterator<T>::ListIterator(Node<Data>* a_node) 
+: m_node(a_node)
+{
+}
+
+template<typename T>
+bool ListIterator<T>::IsNot(const ListIterator<T>& a_other) const noexcept {
+    return (this->m_node != a_other.m_node);
+}   
+
+template<typename T>
+typename ListIterator<T>::Data& ListIterator<T>::GetValue() const noexcept {
+    return this->m_node->Get();
+}
+
+template<typename T>
+typename ListIterator<T>::Data& ListIterator<T>::GetValue() noexcept {
+    return this->m_node->Get();
+}
+
+template<typename T>
+void ListIterator<T>::AdvanceToNext() {
+    this->m_node = this->m_node->Next();
+}
+
+template class ListIterator<double>;
+
 } // details
 } // list
 
@@ -141,6 +187,7 @@ List<T>::List() noexcept
 : m_head(&this->m_head, &this->m_tail, false)
 , m_tail(&this->m_head, &this->m_tail, false)
 , m_deleteAtEnd(false)
+, m_itr()
 {
 }
 
@@ -149,12 +196,8 @@ List<T>::List(bool a_deleteAtEnd) noexcept
 : m_head(&this->m_head, &this->m_tail, a_deleteAtEnd)
 , m_tail(&this->m_head, &this->m_tail, a_deleteAtEnd)
 , m_deleteAtEnd(a_deleteAtEnd)
+, m_itr()
 {
-}
-
-template<typename T>
-List<T>::~List() noexcept {
-    this->Clear();
 }
 
 template<typename T>
@@ -162,6 +205,7 @@ List<T>::List(const List& a_other)
 : m_head(&this->m_head, &this->m_tail, a_other.m_deleteAtEnd)
 , m_tail(&this->m_head, &this->m_tail, a_other.m_deleteAtEnd)
 , m_deleteAtEnd(a_other.m_deleteAtEnd)
+, m_itr()
 {
     this->Copy(&a_other);
 }
@@ -174,6 +218,11 @@ List<T>& List<T>::operator=(const List& a_other) {
     this->m_tail.Set(&this->m_head, &this->m_tail, this->m_deleteAtEnd);
     this->Copy(&a_other);
     return *this;
+}
+
+template<typename T>
+List<T>::~List() noexcept {
+    this->Clear();
 }
 
 template<typename T>
@@ -208,22 +257,13 @@ bool List<T>::isEmpty() const noexcept {
 }
 
 template<typename T>
-void List<T>::Copy(const List *a_other) {
-    details::list::Node<T> *read = a_other->m_head.Next();
-    while (read != a_other->m_tail.Next()) {
-        this->PushHead(read->Get());
-        read = read->Next();
-    }
+typename details::list::ListIterator<T>& List<T>::GetIteratorToFirst() {
+    return this->m_itr = details::list::ListIterator<T>{this->m_head.Next()};
 }
 
 template<typename T>
-void List<T>::Clear() noexcept {
-    details::list::Node<T>* read = this->m_head.Next();
-
-	while(read != this->m_tail.Next()) {			
-		read = read->Next();
-        delete read->Prev();
-    }
+typename details::list::ListIterator<T>& List<T>::GetIteratorToAfterLastValue() {
+    return this->m_itr = details::list::ListIterator<T>{this->m_tail.Next()};
 }
 
 template<typename T>
@@ -302,7 +342,27 @@ size_t List<T>::ForEach(safeAct a_action, void* a_context) const {
     return i;
 }
 
+template<typename T>
+void List<T>::Copy(const List *a_other) {
+    details::list::Node<T> *read = a_other->m_head.Next();
+    while (read != a_other->m_tail.Next()) {
+        this->PushHead(read->Get());
+        read = read->Next();
+    }
+}
+
+template<typename T>
+void List<T>::Clear() noexcept {
+    details::list::Node<T>* read = this->m_head.Next();
+
+	while(read != this->m_tail.Next()) {			
+		read = read->Next();
+        delete read->Prev();
+    }
+}
+
 template class List<size_t>;
+template class List<double>;
 template class List<Media*>;
 
 } // experis
